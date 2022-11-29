@@ -36,12 +36,12 @@ void del_it( TNODE * tipec )
 int intro()
 {
     char x;
-    printf("Isto uhadnem na aké zviera myslíš.\nZahráme si?(a/n):\n");
+    printf("Let me guess animal you are thinking about.\nDo you want to play?(y/n):\n");
     if (scanf ("%c",&x) != 1 )
         return 0;
     if ( x == 'n')
         return 0;
-    printf("Mysli na hociaké zviera.\n\n");
+    printf("Ok then. Think of any animal.\n\n");
     return 1;
 }
 
@@ -51,9 +51,9 @@ TREE setup()
     TNODE * nepal = (TNODE*) malloc (sizeof(TNODE));
     nepal->next_false = NULL;
     nepal->next_true = NULL;
-    nepal->question = strdup("lieta");
-    nepal->res_false = strdup ("pes");
-    nepal->res_true = strdup("vtak");
+    nepal->question = strdup("Does it fly");
+    nepal->res_false = strdup ("dog");
+    nepal->res_true = strdup("bird");
     data.start = nepal;
     return data;
 }
@@ -61,15 +61,15 @@ TREE setup()
 int onemore()
 {
     char x;
-    printf("Dáme ešte jednu(a/n)?\n");
+    printf("One more game(y/n)?\n");
     if (scanf(" %c", &x) != 1)
         return 0;
-    if ( x == 'a')
+    if ( x == 'y')
     {
         printf("\nLetsgooooo\n\n");
         return 1;
     }
-    printf("okey suchar\n");
+    printf("okey budy\n");
     return 0;
 }
 
@@ -88,13 +88,13 @@ char * difference ( TNODE ** tibet , char * novacik, TNODE ** zelenac , int stat
 {
     char * medziclanok;
     if (statement) {
-        printf("Akú otazku by si sa opýtal, aby si rozlíšil %s a %s?\n", novacik, (*tibet)->res_true);
+        printf("What would you ask to differentiate %s and %s?\n", novacik, (*tibet)->res_true);
         medziclanok = strdup((*tibet)->res_true);
         free((*tibet)->res_true);
         (*tibet)->res_true = NULL;
         (*tibet)->next_true = *zelenac;
     } else {
-        printf("Akú otázku by si sa opýtal, aby si rozlíšil %s a %s?\n", novacik, (*tibet)->res_false);
+        printf("What would you ask to differentiate %s and %s?\n", novacik, (*tibet)->res_false);
         medziclanok = strdup((*tibet)->res_false);
         free((*tibet)->res_false);
         (*tibet)->res_false = NULL;
@@ -110,7 +110,7 @@ char getquestion( TNODE ** zelenac,char * novacik )
     fgets(ques,30,stdin);
     ques[strlen(ques)-1] = '\0';
     (*zelenac)->question = strdup(ques);
-    printf("%s %s(a/n)?\n", novacik, ques );
+    printf("%s %s(y/n)?\n", novacik, ques );
     scanf(" %c", &x);
     return x;
 }
@@ -121,7 +121,7 @@ void addhim( char * novacik, TNODE ** tibet , int statement )
     char * medziclanok = difference(tibet,novacik,&zelenac,statement);
     char x = getquestion(&zelenac, novacik);
 
-    if ( x == 'a')
+    if ( x == 'y')
     {
         zelenac->res_true = strdup(novacik);
         zelenac->res_false = medziclanok;
@@ -137,23 +137,23 @@ void addhim( char * novacik, TNODE ** tibet , int statement )
 int findend( TNODE ** tibet , char * zviera  , int statement)
 {
     char x;
-    printf("Je to %s?\n",zviera );
+    printf("Is it %s?\n",zviera );
     if ( scanf(" %c",&x) != 1 )
         return 0;
-    if ( x == 'a' )
+    if ( x == 'y' )
     {
-        printf("Ja som ale macher, to si nečakal čo?\n");
+        printf("I guess You did not expect that.\n");
         return onemore();
     }
     else
     {
         char y;//sluzi na newline
         char animal[20];
-        printf("Čožeeee? Tak to si ma dostal, čo to bolo?\n");
+        printf("Whaaat? Ok you got me, what was it?\n");
         scanf(" %19s", animal);
-        printf("Chceš moju databázu obohatit o tvoje zviera?(a/n)\n");
+        printf("Do you want to help me to guess this animal next time?(y/n)\n");
         scanf(" %c%c",&x,&y);
-        if ( x == 'a' )
+        if ( x == 'y' )
             addhim(animal, tibet, statement);
         return onemore();
     }
@@ -180,10 +180,10 @@ int riesimneriesim( TNODE ** tibet, int statement )
 int ask ( TNODE ** tibet )
 {
     char x;
-    printf("%s?(a/n)\n",(*tibet)->question);
+    printf("%s?(y/n)\n",(*tibet)->question);
     if ( scanf(" %c",&x) != 1 )
         return 0;
-    if ( x =='a')
+    if ( x =='y')
         return riesimneriesim(tibet,1);
     else
         return riesimneriesim(tibet,0);
